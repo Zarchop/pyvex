@@ -1,5 +1,6 @@
 import threading
 import logging
+import archinfo
 l = logging.getLogger('pyvex.lifting.libvex')
 l.setLevel(20) # Shut up
 
@@ -29,10 +30,12 @@ class LibVEXLifter(Lifter):
     def lift(self):
         if self.traceflags != 0 and l.getEffectiveLevel() > 20:
             l.setLevel(20)
+        if isinstance(self.irsb.arch, archinfo.Arch8086):
+            if self.irsb.arch.vex_archinfo['i8086_cs_reg'] == archinfo.arch_8086.UNINITALIZED_SREG:
+                raise ValueError("must provide cs register for 8086 mode")
 
         try:
             _libvex_lock.acquire()
-
             pvc.log_level = l.getEffectiveLevel()
             vex_arch = getattr(pvc, self.irsb.arch.vex_arch)
 
