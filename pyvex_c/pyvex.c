@@ -206,6 +206,8 @@ void vex_init() {
 // Prepare the VexArchInfo struct
 static void vex_prepare_vai(VexArch arch, VexArchInfo *vai) {
 	switch (arch) {
+		case VexArch8086:
+			vai->hwcaps =   VEX_HWCAPS_X86_LZCNT;
 		case VexArchX86:
 			vai->hwcaps =   VEX_HWCAPS_X86_MMXEXT |
 							VEX_HWCAPS_X86_SSE1 |
